@@ -1,0 +1,12 @@
+pandas
+selenium
+openpyxl
+geopy
+plotly
+geopandas
+matplotlib
+flake8
+black
+isort
+pandas-stubs
+streamlit
