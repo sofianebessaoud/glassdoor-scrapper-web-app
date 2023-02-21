@@ -14,3 +14,10 @@ The script was written in Python 3. To install the dependencies, run:
 pip install -r requirements.txt 
 ```
 
+## Run the app 
+
+To run the web app and start using the tool, run: 
+```
+cd src 
+streamlit run frontend.py
+```
