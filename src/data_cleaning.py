@@ -16,7 +16,11 @@ def location_processing(df: pd.DataFrame) -> pd.DataFrame:
 
     returns: pd.DataFrame.
     """
-    city_long_lat = pd.read_excel("data/city_long_lat.xlsx").set_index("city")
+    city_long_lat = (
+        pd.read_excel("data/city_long_lat.xlsx")
+        .drop_duplicates("city")
+        .set_index("city")
+    )
     price_index_state = pd.read_excel("data/price_index_state_2022.xlsx").set_index(
         "state_id"
     )
@@ -26,6 +30,7 @@ def location_processing(df: pd.DataFrame) -> pd.DataFrame:
         lambda x: x.split(",")[-1].strip() if len(x.split(",")) > 1 else "nan"
     )
     df["city"] = df.location.apply(lambda x: x.split(",")[0].strip())
+
     df["latitude"] = df.city.apply(
         lambda x: city_long_lat.loc[x, "lat"] if x in city_long_lat.index else "nan"
     )

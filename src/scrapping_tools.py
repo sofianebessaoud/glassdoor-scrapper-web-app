@@ -1,7 +1,6 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.webelement import WebElement
 
 import scrapping_url
 from scrapping_url import info_url
@@ -86,7 +85,7 @@ def try_load(driver, category: str) -> str:
 
 
 def scrap_data(
-    driver, job_buttons: list[WebElement], num_jobs: int, jobs: list[dict]
+    driver, job_buttons: list, num_jobs: int, jobs: list[dict]
 ) -> list[dict]:
     """
     Main function called by scraper.py. It iterates through all the job offers and

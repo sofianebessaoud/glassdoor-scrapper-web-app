@@ -4,6 +4,7 @@ import pandas as pd
 import streamlit as st
 
 import data_cleaning
+import map_view
 import scraper
 
 # Set page width to full width
@@ -81,7 +82,7 @@ if st.session_state["scrapped"]:
 # Add button to clean and output data
 if st.session_state["scrapped"] and st.session_state["cleaned"]:
     raw_output_df = pd.read_excel(
-        f'output/raw_output/raw_output_{st.session_state["date"]}.xlsx'
+        f'output/raw_output/raw_output_{st.session_state["date"]}.xlsx', index_col=0
     )
 
     st.write("cleaning output")
@@ -90,4 +91,40 @@ if st.session_state["scrapped"] and st.session_state["cleaned"]:
         f'output/cleaned_output/cleaned_output_{st.session_state["date"]}.xlsx'
     )
     st.write("cleaned output saved")
-    st.dataframe(cleaned_df)
+    st.dataframe(
+        cleaned_df[
+            [
+                "company_name",
+                "location",
+                "job_title",
+                "purchasing_power",
+                "job_description",
+            ]
+        ]
+    )
+
+# Add button to clean scrapped data
+if st.session_state["scrapped"]:
+    if st.session_state["cleaned"]:
+        if st.button("Show top 10 job offers"):
+            df = (
+                pd.read_excel(
+                    f'output/cleaned_output/cleaned_output_{st.session_state["date"]}.xlsx',
+                    index_col=0,
+                )
+                .sort_values("purchasing_power", ascending=False)
+                .head(10)
+            )
+            st.write("These job offers are remote:")
+            st.dataframe(
+                df[df.location == "Remote"][
+                    [
+                        "company_name",
+                        "location",
+                        "job_title",
+                        "purchasing_power",
+                        "job_description",
+                    ]
+                ]
+            )
+            map_view.map_view(df)
